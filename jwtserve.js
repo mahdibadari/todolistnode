@@ -1,18 +1,46 @@
-const bodyParser = require('body-parser'),
-    jwt = require('jsonwebtoken'),
-    expressJwt = require('express-jwt'),
-    mongoose = require('mongoose'),
-    cors = require('cors'),
-    dataBaseConfig = require('./database/db');
+let express = require('express'),
+  path = require('path'),
+  mongoose = require('mongoose'),
+  cors = require('cors'),
+  bodyParser = require('body-parser'),
+  dataBaseConfig = require('./database/db');
 
+// Connecting mongoDB
+mongoose.Promise = global.Promise;
+mongoose.connect(dataBaseConfig.db, {
+  useNewUrlParser: true
+}).then(() => {
+    console.log('Database connected sucessfully ')
+  },
+  error => {
+    console.log('Could not connected to database : ' + error)
+  }
+)
+
+// Set up express js port
+const loginRoute = require('./api/routes/login.route')
+const app = express();
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
+app.use(cors());
+app.use('/auth', loginRoute)
 
-app.post('/api/auth', function(req, res) {
-  const body = req.body;
+// Create port
+const port = process.env.PORT || 4000;
+const server = app.listen(port, () => {
+  console.log('Connected to port ' + port)
+})
 
-  const user = USERS.find(user => user.username == body.username);
-  if(!user || body.password != 'todo') return res.sendStatus(401);
-  
-  var token = jwt.sign({userID: user.id}, 'todo-app-super-shared-secret', {expiresIn: '2h'});
-  res.send({token});
+// Find 404 and hand over to error handler
+app.use((req, res, next) => {
+  next(createError(404));
+});
+
+// error handler
+app.use(function (err, req, res, next) {
+  console.error(err.message);
+  if (!err.statusCode) err.statusCode = 500;
+  res.status(err.statusCode).send(err.message);
 });

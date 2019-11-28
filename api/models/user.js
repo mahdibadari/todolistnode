@@ -3,26 +3,32 @@ const Schema = mongoose.Schema;
 
 // Define collection and schema
 let User = new Schema({
-  student_name: {
+  email: {
     type: String
   },
-  student_email: {
+  username: {
     type: String
   },
-  section: {
+  password: {
     type: String
   },
-  subjects: {
-    type: Array
-  },
-  gender: {
+  firstname: {
     type: String
   },
-  dob: {
-    type: Date
+  lastname: {
+    type: String
+  },
+  token: {
+    type: String
   }
 }, {
-  collection: 'students'
-})
+  collection: 'users'
+});
 
-module.exports = mongoose.model('Student', Student)
+User.methods.toJSON = function() {
+  var obj = this.toObject();
+  delete obj.password;
+  return obj;
+}
+
+module.exports = mongoose.model('User', User)
