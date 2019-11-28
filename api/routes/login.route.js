@@ -3,6 +3,7 @@ const loginRoute = express.Router();
 const jwt = require('jsonwebtoken');
 
 let User = require('../models/user');
+let config = require('../../config/config');
 
 loginRoute.route('/register').post((req, res, next) => {
     User.create(req.body, (error, data) => {
@@ -19,7 +20,7 @@ loginRoute.route('/register').post((req, res, next) => {
       if (error) {
         return next(error)
       } else {
-        var token = jwt.sign({id: data._id, username: data.username}, 'todo-app-super-shared-secret', {expiresIn: '2h'});
+        var token = jwt.sign({id: data._id, username: data.username}, config.secret, {expiresIn: '2h'});
         data.token = token;
         res.send({data});
       }

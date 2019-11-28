@@ -3,6 +3,7 @@ let express = require('express'),
   mongoose = require('mongoose'),
   cors = require('cors'),
   bodyParser = require('body-parser'),
+  middleware = require('./helper/middleware'),
   dataBaseConfig = require('./database/db');
 
 // Connecting mongoDB
@@ -18,14 +19,16 @@ mongoose.connect(dataBaseConfig.db, {
 )
 
 // Set up express js port
-const loginRoute = require('./api/routes/login.route')
+const loginRoute = require('./api/routes/login.route');
+const studentRoute = require('./api/routes/student.route');
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: false
 }));
 app.use(cors());
-app.use('/auth', loginRoute)
+app.use('/auth', loginRoute);
+app.use('/student', middleware.checkToken, studentRoute);
 
 // Create port
 const port = process.env.PORT || 4000;
