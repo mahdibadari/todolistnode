@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server.js",
     "startdiff": "nodemon serve.js",
-    "startjwt": "nodemon jwtserve.js"
+    "jwtserve": "nodemon jwtserve.js"
   },
   "author": "",
   "license": "ISC",

@@ -21,6 +21,7 @@ mongoose.connect(dataBaseConfig.db, {
 // Set up express js port
 const loginRoute = require('./api/routes/login.route');
 const studentRoute = require('./api/routes/student.route');
+const todoroutes = require('./api/routes/todoListRoutes');
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -29,6 +30,7 @@ app.use(bodyParser.urlencoded({
 app.use(cors());
 app.use('/auth', loginRoute);
 app.use('/student', middleware.checkToken, studentRoute);
+app.use('/todo', middleware.checkToken, todoroutes);
 
 // Create port
 const port = process.env.PORT || 4000;
