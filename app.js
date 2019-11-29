@@ -1,6 +1,7 @@
 const app = require('express')();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
+const event = require('events')
 
 const documents = {};
 
@@ -32,4 +33,6 @@ io.on("connection", socket => {
     io.emit("documents", Object.keys(documents));
 })
 
-http.listen(4444);
+http.listen(4444, function(){
+    console.log('listening on *:4444');
+});
