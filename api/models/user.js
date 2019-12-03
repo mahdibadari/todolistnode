@@ -20,6 +20,9 @@ let User = new Schema({
   },
   token: {
     type: String
+  },
+  tokenExpiry: {
+    type: Date
   }
 }, {
   collection: 'users'

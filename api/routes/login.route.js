@@ -21,6 +21,8 @@ loginRoute.route('/register').post((req, res, next) => {
         return next(error)
       } else {
         var token = jwt.sign({id: data._id, username: data.username}, config.secret, {expiresIn: '2h'});
+        const now = new Date();
+        data.tokenExpiry = now.setHours(now.getHours() + 2);
         data.token = token;
         res.send({data});
       }
